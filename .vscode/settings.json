@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "types.h": "c",
+        "cdram.h": "c",
+        "utils.h": "c",
+        "pervasive.h": "c",
+        "syscon.h": "c",
+        "gpio.h": "c",
+        "spi.h": "c",
+        "libc.h": "c",
+        "i2c.h": "c",
+        "iftu.h": "c",
+        "oled.h": "c"
+    }
+}

@@ -13,6 +13,16 @@
 
 #include "include/zero.h"
 
+#include "include/cdram.h"
+#include "include/i2c.h"
+#include "include/pervasive.h"
+#include "include/display.h"
+#include "include/syscon.h"
+
+#define DTB_LOAD_ADDR	0x4A000000
+#define LINUX_LOAD_ADDR	0x44000000
+
+
 static volatile core_task_s l_zero_rpc_delegate;
 
 int zero_nop(int a, int b, int c, int d) {
@@ -45,9 +55,35 @@ void* zero_get_task_by_id(int task_id) {
     }
 }
 
+static void invalidate_disable_l2cc(void) {
+    dsb();
+    vp (0x1A002000 + 0x100) &= 0; // Control Register 1 (disable L2 cache)
+    vp (0x1A002000 + 0x77C) |= 0xFFFF; // Invalidate by Way
+    while ( vp (0x1A002000 + 0x77C) & 0xFFFF ) // wait for invalidate to complete
+        ;
+    dmb();
+}
+
+// create a subroutine that invalidates and disables L2CC cache
+
 void zero_init(void) {
     printf("ready\n");
     g_core_status[0] |= CORE_STATUS_RUNNING;
+
+    printf("Enable CDRAM\n");
+	//cdram_enable();
+    printf("Yeah. Definitely\n");
+	i2c_init_bus(1);
+	syscon_init();
+
+    printf("Invalidate and Disable Cache\n");
+    invalidate_disable_l2cc();
+
+    printf("Init Display\n");
+    display_init(DISPLAY_TYPE_OLED);
+
+    printf("Jumping to Linux\n");
+    ((void (*)(int, int, uintptr_t))LINUX_LOAD_ADDR)(0, 0, DTB_LOAD_ADDR);
 }
 
 void test(void);
