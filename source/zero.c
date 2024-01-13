@@ -100,7 +100,7 @@ void zero_init(void) {
     g_core_status[0] |= CORE_STATUS_RUNNING;
 
     printf("Enable CDRAM\n");
-	//cdram_enable();
+	cdram_enable();
     printf("Yeah. Definitely\n");
 	i2c_init_bus(1);
 	syscon_init();
