@@ -51,6 +51,7 @@ int syscon_scratchpad_read(uint16_t offset, void *buffer, int size);
 int syscon_scratchpad_write(uint16_t offset, const void *buffer, int size);
 int syscon_get_baryon_version(void);
 int syscon_get_hardware_info(void);
+int syscon_get_hardware_flag(int flag);
 void syscon_reset_device(int type, int mode);
 void syscon_set_hdmi_cdc_hpd(int enable);
 void syscon_msif_set_power(int enable);

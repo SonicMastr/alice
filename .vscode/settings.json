@@ -10,6 +10,15 @@
         "libc.h": "c",
         "i2c.h": "c",
         "iftu.h": "c",
-        "oled.h": "c"
+        "oled.h": "c",
+        "model.h": "c",
+        "array": "c",
+        "compare": "c",
+        "functional": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "ostream": "c",
+        "ranges": "c"
     }
 }

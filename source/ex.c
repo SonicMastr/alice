@@ -15,6 +15,7 @@
 #include "include/pervasive.h"
 #include "include/display.h"
 #include "include/syscon.h"
+#include "include/model.h"
 
 #include "include/main.h"
 
@@ -64,15 +65,11 @@ void c_RESET(int cpu_id) {
 	syscon_init();
 
     printf("Init Display\n");
-    display_init(DISPLAY_TYPE_OLED);
+    display_init(model_get_type(1));
 
     printf("Jumping to Linux\n");
     ((void (*)(int, int, uintptr_t))LINUX_LOAD_ADDR)(0, 0, DTB_LOAD_ADDR);
 
-    //while (1) {
-    //    main(cpu_id);
-    //    wfe();
-    //}
 }
 
 // temp

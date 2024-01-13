@@ -320,13 +320,13 @@ static void lcd_bl_set_brightness(unsigned int brightness)
 	}
 }
 
-/* static void lcd_bl_reset(void)
+static void lcd_bl_reset(void)
 {
 	struct lcd_i2c_bl_cmd *cmdlist;
-	unsigned int hw_info = sysroot_get_hw_info() & 0xffff00;
+	unsigned int hw_info = syscon_get_hardware_info() & 0xffff00; 
 	unsigned int hw_rev = hw_info - 0x804000;
 
-	if (sysroot_is_au_codec_ic_conexant()) {
+	if ((syscon_get_hardware_flag(0) & 3) == 1) {
 		cmdlist = (struct lcd_i2c_bl_cmd *)lcd_bl_reset_cmd_3;
 	} else {
 		if (hw_rev != 0)
@@ -346,7 +346,7 @@ static void lcd_bl_set_brightness(unsigned int brightness)
 	}
 
 	lcd_i2c_bl_write_cmdlist(cmdlist);
-} */
+}
 
 static void lcd_display_on(unsigned short supplier_elective_data)
 {

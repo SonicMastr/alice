@@ -182,6 +182,11 @@ int syscon_get_hardware_info(void)
 	return g_hardware_info;
 }
 
+int syscon_get_hardware_flag(int flag)
+{
+	return g_hardware_flags[flag];
+}
+
 void syscon_reset_device(int type, int mode)
 {
 	smc(0x11A, type, mode, 0, 0);
