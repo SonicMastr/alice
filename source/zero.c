@@ -55,13 +55,42 @@ void* zero_get_task_by_id(int task_id) {
     }
 }
 
-static void invalidate_disable_l2cc(void) {
+static inline void sync_l2cc(void) {
+    dmb();
+    vp (0x1A002000 + 0x730) = 0x00; // Sync
     dsb();
-    vp (0x1A002000 + 0x100) &= 0; // Control Register 1 (disable L2 cache)
-    vp (0x1A002000 + 0x77C) |= 0xFFFF; // Invalidate by Way
+}
+
+static inline void set_latency_l2cc(void) {
+    dmb();
+    vp (0x1A002000 + 0x108) = 0x0; // Tag Latency Control Register <0,0,0>
+    vp (0x1A002000 + 0x10c) = 0x131; // Data Latency Control Register <1,3,1>
+    dsb();
+}
+
+static inline void disable_l2cc(void) {
+    dmb();
+    vp (0x1A002000 + 0x100) = 0x00; // Control Register 1 (disable L2 cache)
+    dsb();
+    sync_l2cc();
+}
+
+static inline void invalidate_all_by_way_l2cc(void) {
+    dmb();
+    vp (0x1A002000 + 0x77C) = 0xFFFF; // Invalidate by Way
     while ( vp (0x1A002000 + 0x77C) & 0xFFFF ) // wait for invalidate to complete
         ;
+    dsb();
+    sync_l2cc();
+}
+
+static inline void clean_invalidate_all_by_way_l2cc(void) {
     dmb();
+    vp (0x1A002000 + 0x7FC) = 0xFFFF; // Invalidate by Way
+    while ( vp (0x1A002000 + 0x7FC) & 0xFFFF ) // wait for invalidate to complete
+        ;
+    dsb();
+    sync_l2cc();
 }
 
 // create a subroutine that invalidates and disables L2CC cache
@@ -77,7 +106,9 @@ void zero_init(void) {
 	syscon_init();
 
     printf("Invalidate and Disable Cache\n");
-    invalidate_disable_l2cc();
+    disable_l2cc();
+    set_latency_l2cc();
+    invalidate_all_by_way_l2cc();
 
     printf("Init Display\n");
     display_init(DISPLAY_TYPE_OLED);
