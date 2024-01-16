@@ -1,4 +1,4 @@
-/* spad32k mode
+/* spad32k mode */
 .cfg : {
 		cfg_prog_uses_end = 0x00008000;
 		cfg_sp_core0_addr = 0x00008000;
@@ -9,9 +9,8 @@
 		cfg_prog_load_off = 0x00000000;
 		cfg_phys_load_off = 0x1f000000;
     }
-*/
 
-/* dram mode */
+/* dram mode 
 .cfg : {
 		cfg_prog_uses_end = 0x00040000;
 		cfg_sp_core0_addr = 0x00040000;
@@ -22,4 +21,4 @@
 		cfg_prog_load_off = 0x00000000;
 		cfg_phys_load_off = 0x40000000;
     }
-
+*/
